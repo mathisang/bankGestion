@@ -141,4 +141,32 @@ class HomeController extends AbstractController
 
         return $this->redirectToRoute('home');
     }
+
+    /**
+     * @Route("/update/{id}", name="update")
+     */
+    public function update($id): Response
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $transaction = $entityManager->getRepository(Transaction::class)->find($id);
+
+        $transaction->setStatut(1);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('home');
+    }
+
+    /**
+     * @Route("/delete/{id}", name="delete")
+     */
+    public function delete($id): Response
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $transaction = $entityManager->getRepository(Transaction::class)->find($id);
+
+        $entityManager->remove($transaction);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('home');
+    }
 }
