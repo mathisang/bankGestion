@@ -1,0 +1,88 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello HomeController!{% endblock %}
+{% block stylesheets %}
+    <script src="https://cdn.jsdelivr.net/npm/autonumeric@4.1.0"></script>
+{% endblock %}
+
+{% block body %}
+    <div class="header add">
+        <div>
+            <div class="side">
+                <h1>Ajouter une transaction</h1>
+            </div>
+            <a href="{{ path('home') }}">
+                <div class="selector">Retour</div>
+            </a>
+        </div>
+    </div>
+
+    <div class="bodyAdd">
+        {{ form_start(form) }}
+
+        <div class="montant">
+            {#            {{ form_widget(form.amount) }}#}
+            <input type="text" name="currency-field" id="currency-field" value=""
+                   data-type="currency" placeholder="00.00">
+        </div>
+
+        <div class="dateAdd">
+            <label for="">Date de la transaction :</label>
+            {{ form_widget(form.dateTransaction) }}
+        </div>
+
+        <div>
+            <label for="">Description de la transaction :</label>
+            {{ form_widget(form.description) }}
+        </div>
+
+        <div>
+            <label for="">Type de la transaction :</label>
+            {{ form_widget(form.type) }}
+        </div>
+
+        <div>
+            <label for="">Catégorie de la transaction :</label>
+            {{ form_widget(form.categorie) }}
+        </div>
+
+        <div>
+            <label for="">Débiteur :</label>
+            {{ form_widget(form.username) }}
+        </div>
+
+        <div style="display: none">
+            {{ form_widget(form.amount) }}
+            {{ form_widget(form.statut, {'value' : 0}) }}
+        </div>
+
+        <div>
+            <button class="btn btn-primary" id="sendTransaction">{{ button|default('Envoyer la transaction') }}</button>
+        </div>
+
+        {{ form_end(form) }}
+        <script src="https://code.jquery.com/jquery-3.5.1.js"
+                integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+        <script>
+            new AutoNumeric('#currency-field', {
+                alwaysAllowDecimalCharacter: true,
+                caretPositionOnFocus: "decimalRight",
+                createLocalList: false,
+                currencySymbol: "€",
+                currencySymbolPlacement: "s",
+                decimalCharacterAlternative: ",",
+                formulaMode: false,
+                minimumValue: "0",
+                modifyValueOnWheel: false,
+                outputFormat: "string",
+                overrideMinMaxLimits: "ceiling",
+                symbolWhenUnfocused: ""
+            });
+
+            $("#currency-field").change(function() {
+                $("#transaction_amount").val($("#currency-field").val());
+            });
+        </script>
+
+    </div>
+{% endblock %}

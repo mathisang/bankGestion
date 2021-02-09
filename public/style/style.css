@@ -1,0 +1,479 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0 auto;
+    background: #FAFCFF;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.header {
+    position: fixed;
+    width: 100%;
+    height: fit-content;
+    top: 0;
+    background: white;
+    box-shadow: 0px -3px 14px 6px rgba(0, 0, 0, .15);
+    overflow: hidden;
+    z-index: 9999;
+}
+
+.header.add {
+    padding: 1.25rem 0;
+}
+
+.header.add .side {
+    align-items: center;
+}
+
+.header.add h1 {
+    font-size: 20px;
+    margin: 0;
+    color: #757991;
+}
+
+.header .side {
+    display: flex;
+}
+
+.header .side a:last-child {
+    margin-left: 2rem;
+}
+
+.header > div {
+    height: 4.25rem;
+    position: relative;
+    margin-top: 1.25rem;
+    padding: 0 1rem;
+    transition: all .5s ease;
+}
+
+.header > div .menu {
+    display: flex;
+    justify-content: space-between;
+}
+
+.header > div.opened {
+    height: 312px;
+    padding-bottom: .8rem;
+}
+
+.header > div.openedEmpty {
+    height: 136px;
+    padding-bottom: .8rem;
+}
+
+.header > div .recapStyle {
+    display: none;
+    opacity: 0;
+    transition: all .3s ease;
+}
+
+.header > div.opened .recapStyle, .header > div.openedEmpty .recapStyle {
+    display: flex;
+    opacity: 1;
+}
+
+.header.add > div {
+    height: unset;
+    margin-top: unset;
+}
+
+.header a {
+    height: fit-content;
+}
+
+.header .open {
+    position: absolute;
+    bottom: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 11px;
+    color: #B7B8C9;
+    text-transform: uppercase;
+}
+
+a {
+    text-decoration: none;
+}
+
+p {
+    margin: 0;
+}
+
+.selector {
+    color: #757891;
+    padding: .5rem 0;
+}
+
+.selector.active {
+    color: white;
+    /*font-weight: 600;*/
+    border-radius: 100px;
+    background: #1775fa;
+    padding: .5rem 1rem;
+}
+
+.transactions, .bodyAdd {
+    padding-top: 5.25rem;
+}
+
+.transactions .line {
+    display: flex;
+    justify-content: space-between;
+    /* padding: 1.5rem 0; */
+    height: 94px;
+    /* height: 60px; */
+    flex-wrap: wrap;
+    position: relative;
+    width: 100%;
+    border-bottom: 1px solid #E9EAF1;
+}
+
+.blockLine {
+    display: flex;
+    justify-content: space-between;
+    width: -moz-available;
+    width: -webkit-fill-available;
+    width: fill-available;
+    position: absolute;
+    padding: 1.5rem 1rem;
+    background: #FAFCFF;
+    transition: all .3s ease;
+}
+
+.swiped {
+    height: 94px;
+    width: 94px;
+    color: white;
+    font-weight: 600;
+    position: absolute;
+    top: 0;
+    z-index: -1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.swipeRight {
+    right: 0;
+    background: red;
+}
+
+.swipeLeft {
+    left: 0;
+    background: blue;
+}
+
+.animLeft {
+    animation: animationLeftReverse .5s ease forwards;
+}
+
+.animRight {
+    animation: animationRightReverse .5s ease forwards;
+}
+
+.swipeAnimLeft {
+    animation: animationLeft .5s ease forwards;
+}
+
+.swipeAnimLeft {
+    animation: animationLeft .5s ease forwards;
+}
+
+@keyframes animationLeft {
+    from {
+        left: 0;
+    }
+    to {
+        left: -94px;
+    }
+}
+@keyframes animationLeftReverse {
+    from {
+        left: -94px;
+    }
+    to {
+        left: 0;
+    }
+}
+.swipeAnimRight {
+    animation: animationRight .5s ease forwards;
+}
+
+@keyframes animationRight {
+    from {
+        left: 0;
+    }
+    to {
+        left: 94px;
+    }
+}
+@keyframes animationRightReverse {
+    from {
+        left: 94px;
+    }
+    to {
+        left: 0;
+    }
+}
+
+.transactions .line .leftSide {
+    display: flex;
+    align-items: center;
+}
+
+.transactions .line:last-child {
+    border-bottom: none;
+}
+
+.transactions .line .category {
+    width: 46px;
+    height: 46px;
+    border-radius: 10px;
+    background: #B1B2C5;
+    margin-right: .75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.transactions .line .category img {
+    width: 26px;
+    height: 26px;
+}
+
+.transactions .line .informations {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.transactions .line .informations .title {
+    font-weight: 600;
+    color: #54576F;
+    font-size: 19px;
+    margin-bottom: .25rem;
+}
+
+.transactions .line .informations .description {
+    color: #B7B8C9;
+    font-size: 15px;
+}
+
+.transactions .line .amount {
+    color: #757891;
+    font-size: 20px;
+    text-align: right;
+}
+
+.montant {
+    display: flex;
+    justify-content: center;
+    padding: 1.5rem 0 1rem;
+}
+
+.statut {
+    height: 10px;
+    width: 10px;
+    border-radius: 50px;
+    margin: 8px 0 0 auto;
+}
+
+.statut.redCircle {
+    background: #fa1717;
+}
+
+.statut.greenCircle {
+    background: #1ec202;
+}
+
+.montant input {
+    background: none;
+    border: none !important;
+    font-size: 40px;
+    width: 100%;
+    text-align: center;
+}
+
+.montant input::placeholder {
+    font-size: 40px;
+}
+
+.montant input:focus {
+    outline: none;
+}
+
+.bodyAdd {
+    margin-left: 1rem;
+    margin-right: 1rem;
+    font-size: 16px;
+}
+
+.bodyAdd .dateAdd > div {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.bodyAdd textarea {
+    width: 98.5%;
+}
+
+.bodyAdd label {
+    display: block;
+    margin-bottom: .5rem;
+    margin-top: 1rem;
+    color: #757991;
+    font-weight: 600;
+}
+
+.bodyAdd select {
+    width: 100%;
+}
+
+.bodyAdd input, .bodyAdd select {
+    height: 2rem;
+    border: 1px solid #bfbfbf;
+    border-radius: 3px;
+    padding-left: .5rem;
+    color: #757991;
+}
+
+.bodyAdd input {
+    width: 98%;
+    padding-left: .75rem;
+}
+
+.bodyAdd .dateAdd select {
+    width: 32%;
+}
+
+.bodyAdd #sendTransaction {
+    width: 100%;
+    height: 2.5rem;
+    background: #1775fa;
+    margin-top: 2rem;
+    border-radius: 50px;
+    color: white;
+    font-weight: 600;
+    border: none;
+    font-size: 16px;
+}
+
+.recapStyle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 1.25rem auto 0;
+}
+
+.paiementOk {
+    font-weight: 600;
+    color: #1775fa;
+    text-decoration: underline;
+}
+
+.periodeRecap {
+    text-align: center;
+    color: #B7B8C9;
+    text-transform: uppercase;
+    font-size: 14px;
+    font-weight: 600;
+    padding-bottom: 3px;
+    border-bottom: 2px solid #cccedc;
+    width: fit-content;
+}
+
+.listComptes {
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+    margin-top: .75rem;
+}
+
+.listComptes .compte {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    width: 40%;
+    border-radius: 5px;
+    border: 1px solid #f3f4f9;
+}
+
+.listComptes .compte h2 {
+    color: #1775fa;
+    font-size: 18px;
+    margin: .5rem 0;
+}
+
+.amountRecap {
+    font-size: 18px;
+    color: #757891;
+    font-weight: 600;
+}
+
+.recapFinale {
+    color: #757891;
+    font-size: 15px;
+    margin: 1rem 0;
+}
+
+.recapFinale span.blueColor {
+    color: #1775fa;
+}
+
+.recapFinale span.bold {
+    font-weight: 600;
+}
+
+.labelAmount {
+    text-transform: uppercase;
+    font-size: 12px;
+    color: #B7B8C9;
+    margin: .25rem 0 .5rem;
+}
+
+.modify {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: .5rem 0;
+}
+
+.modify button {
+    border-radius: 60px;
+    color: white;
+    text-transform: uppercase;
+    font-size: 12px;
+    border: none;
+    font-weight: 600;
+    padding: .25rem .75rem;
+}
+
+.modify .cancelPayment {
+    background: #c91919;
+    /*margin-right: 1rem;*/
+}
+
+.modify .regularPayment {
+    background: #1775fa;
+}
+
+.footer {
+    position: fixed;
+    bottom: 1.25rem;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.footer .addTransaction {
+    background: #757991;
+    padding: .75rem 2rem;
+    border-radius: 50px;
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 1px 8px 1px rgba(0, 0, 0, .3);
+}

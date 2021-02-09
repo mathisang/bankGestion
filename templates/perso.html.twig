@@ -1,0 +1,95 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello HomeController!{% endblock %}
+{% block stylesheets %}
+    <script src="{{ asset('js/swiped.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+    <div class="header">
+        <div class="boxHeader">
+            <div class="menu">
+                <a href="{{ path('home') }}">
+                    <div class="selector {% if selected == "dashboard" %} active{% endif %}">Dashboard</div>
+                </a>
+                <div class="side">
+                    <a href="{{ path('mathis') }}">
+                        <div class="selector{% if selected == "mathis" %} active{% endif %}">Mathis</div>
+                    </a>
+                    <a href="{{ path('abigail') }}">
+                        <div class="selector{% if selected == "abigail" %} active{% endif %}">Abigail</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="transactions">
+        {% for line in transactions %}
+            <div class="line">
+                <div class="blockLine">
+                    <div class="leftSide">
+                        <div class="category"><img src="{{ asset('puzzle.png') }}" alt=""></div>
+                        <div class="informations">
+                            <p class="title">{{ line.description }}</p>
+                            <p class="description">{{ line.dateTransaction|date("d/m/Y") }}
+                                - {% if line.type == '1' %}À diviser{% elseif line.type == '2' %}À rembourser{% else %}Personnel{% endif %}
+                                - {{ line.username }}</p>
+                        </div>
+                    </div>
+                    <div class="amount">
+                        {{ line.amount }}
+                    </div>
+                </div>
+                <div class="swiped swipeRight">Supprimer</div>
+                <div class="swiped swipeLeft">Régulariser<br>ce paiement</div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="footer">
+        <a href="{{ path('add') }}">
+            <div class="addTransaction">Nouveau</div>
+        </a>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+            integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <script>
+
+        // SI DAUTRES SONT OUVERT ALORS ON LES FERMES AVEC LANIMATION
+
+        $('.line').bind('swiped-left', function (e) {
+            if ($(this).children('.blockLine').hasClass('swipeAnimRight')) {
+                $(this).children('.blockLine').removeClass('swipeAnimRight');
+                setTimeout(() => {
+                    $(this).children('.blockLine').removeClass('animRight');
+                }, 500);
+            } else {
+                $('.blockLine').not($(this).children('.blockLine')).removeClass('swipeAnimLeft swipeAnimRight');
+                setTimeout(() => {
+                    $('.blockLine').not($(this).children('.blockLine')).removeClass('animLeft animRight');
+                }, 500);
+
+                $(this).children('.blockLine').addClass('swipeAnimLeft');
+                $(this).children('.blockLine').addClass('animLeft');
+            }
+        });
+        $('.line').bind('swiped-right', function (e) {
+            if ($(this).children('.blockLine').hasClass('swipeAnimLeft')) {
+                $(this).children('.blockLine').removeClass('swipeAnimLeft');
+                setTimeout(() => {
+                    $(this).children('.blockLine').removeClass('animLeft');
+                }, 500);
+            } else {
+                $('.blockLine').not($(this).children('.blockLine')).removeClass('swipeAnimRight swipeAnimLeft');
+                setTimeout(() => {
+                    $('.blockLine').not($(this).children('.blockLine')).removeClass('animRight animLeft');
+                }, 500);
+
+                $(this).children('.blockLine').addClass('swipeAnimRight');
+                $(this).children('.blockLine').addClass('animRight');
+            }
+        });
+    </script>
+
+{% endblock %}
