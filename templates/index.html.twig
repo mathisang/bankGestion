@@ -56,16 +56,16 @@
                         <div class="listComptes">
                             <div class="compte">
                                 <h2>Mathis</h2>
-                                <p class="amountRecap">{{ diviserMathis }}€</p>
+                                <p class="amountRecap">{{ amount(diviserMathis) }}</p>
                                 <p class="labelAmount">Dépenses communes</p>
-                                <p class="amountRecap">{{ rembourserMathis }}€</p>
+                                <p class="amountRecap">{{ amount(rembourserMathis) }}</p>
                                 <p class="labelAmount">Remboursement</p>
                             </div>
                             <div class="compte">
                                 <h2>Abigail</h2>
-                                <p class="amountRecap">{{ diviserAbigail }}€</p>
+                                <p class="amountRecap">{{ amount(diviserAbigail) }}</p>
                                 <p class="labelAmount">Dépenses communes</p>
-                                <p class="amountRecap">{{ rembourserAbigail }}€</p>
+                                <p class="amountRecap">{{ amount(rembourserAbigail) }}</p>
                                 <p class="labelAmount">Remboursement</p>
                             </div>
                         </div>
@@ -73,11 +73,11 @@
 
                     {% if totalMathis > totalAbigail %}
                         <p class="recapFinale"><span class="bold">Abigail</span> doit <span
-                                    class="blueColor bold">{{ totalMathis - totalAbigail }}€</span> à <span
+                                    class="blueColor bold">{{ amount(totalMathis - totalAbigail) }}</span> à <span
                                     class="bold">Mathis</span></p>
                     {% elseif totalAbigail > totalMathis %}
                         <p class="recapFinale"><span class="bold">Mathis</span> doit
-                            <span>{{ totalAbigail - totalMathis }}€</span> à <span class="bold">Abigail</span></p>
+                            <span>{{ amount(totalMathis - totalAbigail) }}</span> à <span class="bold">Abigail</span></p>
                     {% else %}
                         <p class="recapFinale">Les comptes sont à jour</p>
                     {% endif %}
@@ -109,7 +109,7 @@
                         </div>
                     </div>
                     <div class="amount">
-                        {{ line.amount }}
+                        {{ amount(line.amount) }}
                         <br>
                         {% if line.statut == 0 %}
                             <div class="statut redCircle"></div>
@@ -119,7 +119,6 @@
                     </div>
                 </div>
 
-{#                A FAIRE : SUPPRIMER ET REGULARISER UN SEUL PAIEMENT#}
                 <div class="swiped swipeRight"><a href="{{ path('delete', {id: line.id}) }}">Supprimer</a></div>
                 <div class="swiped swipeLeft">{% if line.statut == 0 %}<a href="{{ path('update', {id: line.id}) }}">Régulariser<br>ce paiement</a>{% else %}Paiement régularisé{% endif %}</div>
             </div>

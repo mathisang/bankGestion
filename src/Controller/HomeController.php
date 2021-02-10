@@ -65,11 +65,7 @@ class HomeController extends AbstractController
 
         $transactions = $this->getDoctrine()
             ->getRepository(Transaction::class)
-            ->findBy([
-                'username' => 'Mathis'
-            ], [
-                'dateTransaction' => 'DESC'
-            ]);
+            ->findPerso('Mathis');
 
         $monthNowStart = date('Y-m-01');
         $monthNowEnd = date('Y-m-d');
@@ -77,13 +73,12 @@ class HomeController extends AbstractController
             ->getRepository(Transaction::class)
             ->findDepensesMonth("Mathis", $monthNowStart, $monthNowEnd);
 
-        var_dump($monthNow);
-        var_dump($monthNowStart);
-        var_dump($monthNowEnd);
+        $amountNow = $monthNow[0]['amount'];
 
         return $this->render('perso.html.twig', [
             'selected' => "mathis",
             'transactions' => $transactions,
+            'amountNow' => $amountNow,
         ]);
     }
 

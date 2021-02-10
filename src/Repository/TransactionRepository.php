@@ -39,6 +39,18 @@ class TransactionRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findPerso($user)
+    {
+        return $this->createQueryBuilder('t')
+            ->select("t.id, REPLACE(t.amount, ',', '') as amount, t.description, t.dateTransaction, t.type, t.categorie, t.username, t.statut")
+            ->andWhere('t.username = :user')
+            ->setParameter('user', $user)
+            ->orderBy('t.dateTransaction', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     public function findDepensesMonth($user, $start, $end)
     {
         return $this->createQueryBuilder('t')

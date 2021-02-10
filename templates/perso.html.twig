@@ -22,7 +22,11 @@
                 </div>
             </div>
             <div class="recapStyle">
-                Comptes
+                <p>Ce mois-ci</p>
+                <p>{{ amountNow }}</p>
+                <br>
+                <p>Le mois dernier</p>
+                <p>Montant</p>
             </div>
             <div id="open" class="open">
                 Ouvrir
@@ -44,7 +48,7 @@
                         </div>
                     </div>
                     <div class="amount">
-                        {{ line.amount }}
+                        {{ amount(line.amount) }}
                     </div>
                 </div>
                 <div class="swiped swipeRight">Supprimer</div>
