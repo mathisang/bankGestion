@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Configuration;
 use App\Entity\Transaction;
 use App\Form\TransactionType;
+use App\Repository\ConfigurationRepository;
 use App\Repository\TransactionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
@@ -19,41 +21,51 @@ class HomeController extends AbstractController
      */
     public function index(TransactionRepository $transaction, EntityManagerInterface $em): Response
     {
-        $this->transaction = $transaction;
+        $configuration = $this->getDoctrine()
+            ->getRepository(Configuration::class)
+            ->findLaunch();
 
-        $transactions = $this->getDoctrine()
-            ->getRepository(Transaction::class)
-            ->findCommun();
+        $configuration = $configuration[0]["statut"];
 
-        $qb = $em->getConnection()->prepare("SELECT date_transaction FROM transaction WHERE statut = 0 AND type != 3 ORDER BY date_transaction ASC LIMIT 1");
-        $qb->execute();
-        $dateDebut = $qb->fetchAll();
-
-        if($dateDebut) {
-            $dateDebut = $dateDebut[0]["date_transaction"];
+        if($configuration == 0) {
+            return $this->redirectToRoute('whoareyou');
         }
         else {
-            $dateDebut = 0;
+
+            $this->transaction = $transaction;
+
+            $transactions = $this->getDoctrine()
+                ->getRepository(Transaction::class)
+                ->findCommun();
+
+            $qb = $em->getConnection()->prepare("SELECT date_transaction FROM transaction WHERE statut = 0 AND type != 3 ORDER BY date_transaction ASC LIMIT 1");
+            $qb->execute();
+            $dateDebut = $qb->fetchAll();
+
+            if ($dateDebut) {
+                $dateDebut = $dateDebut[0]["date_transaction"];
+            } else {
+                $dateDebut = 0;
+            }
+
+            $qb = $em->getConnection()->prepare("SELECT date_transaction FROM transaction WHERE statut = 0 AND type != 3 ORDER BY date_transaction DESC LIMIT 1");
+            $qb->execute();
+            $dateFin = $qb->fetchAll();
+
+
+            if ($dateFin) {
+                $dateFin = $dateFin[0]["date_transaction"];
+            } else {
+                $dateFin = 0;
+            }
+
+            return $this->render('index.html.twig', [
+                'selected' => "dashboard",
+                'transactions' => $transactions,
+                'dateDebut' => $dateDebut,
+                'dateFin' => $dateFin
+            ]);
         }
-
-        $qb = $em->getConnection()->prepare("SELECT date_transaction FROM transaction WHERE statut = 0 AND type != 3 ORDER BY date_transaction DESC LIMIT 1");
-        $qb->execute();
-        $dateFin = $qb->fetchAll();
-
-
-        if($dateFin) {
-            $dateFin = $dateFin[0]["date_transaction"];
-        }
-        else {
-            $dateFin = 0;
-        }
-
-        return $this->render('index.html.twig', [
-            'selected' => "dashboard",
-            'transactions' => $transactions,
-            'dateDebut' => $dateDebut,
-            'dateFin' => $dateFin
-        ]);
     }
 
     /**
@@ -67,18 +79,41 @@ class HomeController extends AbstractController
             ->getRepository(Transaction::class)
             ->findPerso('Mathis');
 
+        $monthLastStart = date("Y-m-j", strtotime("first day of previous month"));
+        $monthLastEnd = date("Y-m-j", strtotime("last day of previous month"));
+        $amountLast = $this->getDoctrine()
+            ->getRepository(Transaction::class)
+            ->findDepensesMonth("Mathis", $monthLastStart, $monthLastEnd);
+
+        $totalLast = 0;
+        foreach ($amountLast as $total) {
+            $totalLast = $totalLast + $total['amount'];
+        }
+
+        if($amountLast == NULL)
+            $amountLast = 0;
+
         $monthNowStart = date('Y-m-01');
         $monthNowEnd = date('Y-m-d');
-        $monthNow = $this->getDoctrine()
+        $amountNow = $this->getDoctrine()
             ->getRepository(Transaction::class)
             ->findDepensesMonth("Mathis", $monthNowStart, $monthNowEnd);
 
-        $amountNow = $monthNow[0]['amount'];
+        $totalNow = 0;
+        foreach ($amountNow as $total) {
+            $totalNow = $totalNow + $total['amount'];
+        }
+
+        if($amountNow == NULL)
+            $amountNow = 0;
 
         return $this->render('perso.html.twig', [
             'selected' => "mathis",
             'transactions' => $transactions,
             'amountNow' => $amountNow,
+            'amountLast' => $amountLast,
+            'totalNow' => $totalNow,
+            'totalLast' => $totalLast,
         ]);
     }
 
@@ -97,10 +132,42 @@ class HomeController extends AbstractController
                 'dateTransaction' => 'DESC'
             ]);
 
+        $monthLastStart = date("Y-m-j", strtotime("first day of previous month"));
+        $monthLastEnd = date("Y-m-j", strtotime("last day of previous month"));
+        $monthLast = $this->getDoctrine()
+            ->getRepository(Transaction::class)
+            ->findDepensesMonth("Abigail", $monthLastStart, $monthLastEnd);
+
+        $amountLast = $monthLast[0]['amount'];
+        if($amountLast == NULL)
+            $amountLast = 0;
+
+        $monthNowStart = date('Y-m-01');
+        $monthNowEnd = date('Y-m-d');
+        $monthNow = $this->getDoctrine()
+            ->getRepository(Transaction::class)
+            ->findDepensesMonth("Abigail", $monthNowStart, $monthNowEnd);
+
+        $amountNow = $monthNow[0]['amount'];
+        if($amountNow == NULL)
+            $amountNow = 0;
+
         return $this->render('perso.html.twig', [
             'selected' => "abigail",
             'transactions' => $transactions,
+            'amountNow' => $amountNow,
+            'amountLast' => $amountLast,
         ]);
+    }
+
+    /**
+     * @Route("/settings/who", name="whoareyou")
+     */
+    public function whoareyou(): Response
+    {
+
+
+        return $this->render('/settings/whoareyou.html.twig', []);
     }
 
     /**

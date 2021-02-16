@@ -178,6 +178,64 @@ p {
     background: blue;
 }
 
+.bar {
+    width: 85%;
+    height: 16px;
+    border-radius: 50px;
+    background: #B7B8C9;
+    display: flex;
+    /*overflow: hidden;*/
+}
+
+.bar>div:first-child {
+    height: 100%;
+    background: #3f46ba;
+    border-radius: 50px 0 0 50px;
+}
+
+.bar>div:last-child {
+    height: 100%;
+    background: #ba3f3f;
+    border-radius: 0 50px 50px 0;
+}
+
+.bar .categoryBar {
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+.bar .infosOverlay {
+    padding: .25rem .5rem;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,.3);
+    color: white;
+    font-weight: 600;
+    position: absolute;
+    top: 22px;
+    opacity: 0;
+    transition: all .3s ease;
+    text-align: center;
+    min-width: max-content;
+}
+
+.bar .infosOverlay.show {
+    opacity: 1;
+    animation: removeShow .5s ease forwards;
+    animation-delay: 2s;
+}
+
+@keyframes removeShow {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
 .animLeft {
     animation: animationLeftReverse .5s ease forwards;
 }

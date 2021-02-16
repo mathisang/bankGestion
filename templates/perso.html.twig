@@ -1,9 +1,6 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Hello HomeController!{% endblock %}
-{% block stylesheets %}
-    <script src="{{ asset('js/swiped.js') }}"></script>
-{% endblock %}
 
 {% block body %}
     <div class="header">
@@ -23,10 +20,24 @@
             </div>
             <div class="recapStyle">
                 <p>Ce mois-ci</p>
-                <p>{{ amountNow }}</p>
+                <div class="bar">
+{#                    {{ totalNow }}#}
+                    {% for amount in amountNow %}
+                    <div class="categoryBar" onclick="showDetails(this)" style="width: {{ (amount.amount/totalNow)*100 }}%">
+                        <div class="infosOverlay">
+                            {{ category(amount.categorie) }}
+                            <br>
+                            {{ amount(amount.amount) }} ({{ ((amount.amount/totalNow)*100)|number_format(2, '.', ',') }}%)
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
                 <br>
                 <p>Le mois dernier</p>
-                <p>Montant</p>
+                {{ totalLast }}
+                {% for amount in amountLast %}
+                    <p>{{ amount(amount.amount) }} - {{ amount.categorie }}</p>
+                {% endfor %}
             </div>
             <div id="open" class="open">
                 Ouvrir
@@ -51,6 +62,7 @@
                         {{ amount(line.amount) }}
                     </div>
                 </div>
+{#                ENLEVER SWIPELEFT SUR PERSO#}
                 <div class="swiped swipeRight">Supprimer</div>
                 <div class="swiped swipeLeft">Régulariser<br>ce paiement</div>
             </div>
@@ -112,6 +124,18 @@
                 $('#open').text('Ouvrir');
             }
         });
+
+        // IMMPOSIBLE DE SCROLL
+        function showDetails(e) {
+            for(var i=0; i < $('.infosOverlay').length; i++) {
+                $('.infosOverlay')[i].classList.remove('show');
+            }
+            e.children[0].classList.add('show');
+
+            setTimeout(function(){
+                e.children[0].classList.remove('show');
+            }, 2500);
+        }
     </script>
 
 {% endblock %}

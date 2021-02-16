@@ -54,14 +54,14 @@ class TransactionRepository extends ServiceEntityRepository
     public function findDepensesMonth($user, $start, $end)
     {
         return $this->createQueryBuilder('t')
-            ->select("SUM(REPLACE(t.amount, ',', '')) as amount")
+            ->select("SUM(REPLACE(t.amount, ',', '')) as amount, t.categorie")
             ->andWhere('t.username = :user')
             ->andWhere('t.dateTransaction >= :debut')
             ->andWhere('t.dateTransaction <= :fin')
             ->setParameter('user', $user)
             ->setParameter('debut', $start)
             ->setParameter('fin', $end)
-            ->orderBy('t.dateTransaction', 'DESC')
+            ->groupBy('t.categorie')
             ->getQuery()
             ->getResult()
         ;

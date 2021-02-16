@@ -10,6 +10,7 @@ class AppExtension extends AbstractExtension
     {
         return [
             new TwigFunction('amount', [$this, 'amountFormat']),
+            new TwigFunction('category', [$this, 'getCategory']),
         ];
     }
 
@@ -22,5 +23,34 @@ class AppExtension extends AbstractExtension
             $amount = $number;
         }
         return number_format($amount, 2, '.', ' ')."€";
+    }
+
+    public function getCategory($category)
+    {
+        switch ($category) {
+            case 1:
+                $type = "Loyer";
+                break;
+            case 2:
+                $type = "Courses";
+                break;
+            case 3:
+                $type = "Achat & Shopping";
+                break;
+            case 4:
+                $type = "Restauration";
+                break;
+            case 5:
+                $type = "Transport";
+                break;
+            case 6:
+                $type = "Abonnement";
+                break;
+            default:
+                $type = "Autres";
+                break;
+        }
+
+        return $type;
     }
 }

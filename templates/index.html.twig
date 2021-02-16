@@ -1,9 +1,6 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Hello HomeController!{% endblock %}
-{% block stylesheets %}
-    <script src="{{ asset('js/swiped.js') }}"></script>
-{% endblock %}
 
 {% block body %}
     <div class="header">
@@ -130,8 +127,7 @@
             <div class="addTransaction">Nouveau</div>
         </a>
     </div>
-    <script src="https://code.jquery.com/jquery-3.5.1.js"
-            integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+
     <script>
 
         $('.line').bind('swiped-left', function (e) {

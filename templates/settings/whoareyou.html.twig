@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello HomeController!{% endblock %}
+{% block stylesheets %}
+    {{ encore_entry_link_tags('settings') }}
+{% endblock %}
+
+{% block body %}
+    <div class="setting">
+        <div class="headSetting">
+            <a class="skip" href="#">Ignorer</a>
+        </div>
+
+        <div class="whoAreYou">
+            <h1>Qui êtes-vous ?</h1>
+            <p>Nous avons uniquement besoin de vos prénoms.</p>
+            <p>Cela permettra de personnaliser vos dépenses.</p>
+
+            <div class="boxNaming">
+                <label for="yourname">Votre prénom</label>
+                <input type="text" name="yourname" id="yourname" />
+                <label for="hisname">Son prénom</label>
+                <input type="text" name="hisname" id="hisname" />
+            </div>
+        </div>
+
+        <div class="bottomSetting">
+            <a href="#">Suivant</a>
+        </div>
+    </div>
+
+    <script>
+        $("input").change(function() {
+            if($("#yourname").val().length > 2 && $("#hisname").val().length > 2) {
+                alert("coucou");
+            }
+        });
+    </script>
+{% endblock %}
