@@ -1,3 +1,5 @@
+@import "./colors.scss";
+
 body {
   background: linear-gradient(180deg, #C378FF 0%, #9363FD 100%);
   width: 100vw;
@@ -31,20 +33,23 @@ body {
       }
     }
 
-    .whoAreYou {
-      margin-top: 28%;
+    .boxPosition {
+      margin-top: 23%;
 
       h1 {
-        font-family: GilroyBlack, sans-serif;
+        font-family: GilroyExtraBold, sans-serif;
         font-size: 32px;
       }
 
-      .boxNaming {
+      // FORM - User
+      .marginFlex {
         display: flex;
         flex-direction: column;
         align-items: center;
         margin-top: 3rem;
+      }
 
+      .boxNaming {
         label {
           font-family: GilroySemiBold, sans-serif;
           margin-bottom: 1rem;
@@ -61,6 +66,64 @@ body {
           font-size: 16px;
           color: white;
           font-family: GilroyMedium, sans-serif;
+        }
+      }
+
+      // Profile
+      .colorProfile {
+        h2 {
+          font-family: GilroyBold, sans-serif;
+          margin: 0;
+        }
+
+        p {
+          margin: 18px 0 10px;
+        }
+
+        .colorBar {
+          display: flex;
+          background: rgba(241, 238, 255, 0.21);
+          border-radius: 14px;
+          padding: 10px;
+
+          .color {
+            width: 20px;
+            height: 20px;
+            border-radius: 20px;
+            margin: 0 18px 0 0;
+            box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.11);
+          }
+
+          .selected {
+            border: 1px solid #FFFFFF;
+            width: 18px;
+            height: 18px;
+          }
+
+          .blue {
+            background: $blue;
+          }
+
+          .red {
+            background: $red;
+          }
+
+          .green {
+            background: $green;
+          }
+
+          .yellow {
+            background: $yellow;
+          }
+
+          .purple {
+            background: $purple;
+          }
+
+          .new {
+            background: $new;
+            margin-right: 0 !important;
+          }
         }
       }
     }

@@ -44,12 +44,12 @@ class User extends Component {
                         <span onClick={skipNaming}>Ignorer</span>
                     </div>
 
-                    <div className="whoAreYou">
+                    <div className="boxPosition">
                         <h1>Qui êtes-vous ?</h1>
                         <p>Nous avons uniquement besoin de vos prénoms.</p>
                         <p>Cela permettra de personnaliser vos dépenses.</p>
 
-                        <form className="boxNaming" id="formName">
+                        <form className="marginFlex boxNaming" id="formName">
                             <label htmlFor="yourName">Votre prénom</label>
                             <input type="text" name="yourName" value={this.state.yourName}
                                    onChange={e => this.setState({yourName: e.target.value})}/>
