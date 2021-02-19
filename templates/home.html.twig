@@ -1,0 +1,189 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello HomeController!{% endblock %}
+
+{% block body %}
+    <div class="header">
+        <div class="boxHeader">
+            <div class="menu">
+                <a href="{{ path('home') }}">
+                    <div class="selector {% if selected == "dashboard" %} active{% endif %}">Dashboard</div>
+                </a>
+                <div class="side">
+                    <a href="{{ path('mathis') }}">
+                        <div class="selector{% if selected == "mathis" %} active{% endif %}">Mathis</div>
+                    </a>
+                    <a href="{{ path('abigail') }}">
+                        <div class="selector{% if selected == "abigail" %} active{% endif %}">Abigail</div>
+                    </a>
+                </div>
+            </div>
+            {% if selected == "dashboard" %}
+                <div class="recapStyle">
+                    {% set diviserMathis = 0 %}
+                    {% set rembourserMathis = 0 %}
+                    {% set diviserAbigail = 0 %}
+                    {% set rembourserAbigail = 0 %}
+
+                    {% for line in transactions %}
+                        {% if line.username == "Mathis" and line.statut == "0" %}
+                            {% if line.type == "1" %}
+                                {% set diviserMathis = diviserMathis + line.amount|slice(0,-1) %}
+                            {% endif %}
+                            {% if line.type == "2" %}
+                                {% set rembourserMathis = rembourserMathis + line.amount|slice(0,-1) %}
+                            {% endif %}
+                        {% endif %}
+                        {% if line.username == "Abigail" and line.statut == "0" %}
+                            {% if line.type == "1" %}
+                                {% set diviserAbigail = diviserAbigail + line.amount|slice(0,-1) %}
+                            {% endif %}
+                            {% if line.type == "2" %}
+                                {% set rembourserAbigail = rembourserAbigail + line.amount|slice(0,-1) %}
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+
+                    {% set totalMathis = (diviserMathis / 2)+rembourserMathis %}
+                    {% set totalAbigail = (diviserAbigail / 2)+rembourserAbigail %}
+
+                    <p class="periodeRecap">Période du {{ dateDebut|date('d/m/y') }} au {{ dateFin|date('d/m/y') }}</p>
+
+                    {% if totalMathis != 0 or totalAbigail != 0 %}
+                        <div class="listComptes">
+                            <div class="compte">
+                                <h2>Mathis</h2>
+                                <p class="amountRecap">{{ amount(diviserMathis) }}</p>
+                                <p class="labelAmount">Dépenses communes</p>
+                                <p class="amountRecap">{{ amount(rembourserMathis) }}</p>
+                                <p class="labelAmount">Remboursement</p>
+                            </div>
+                            <div class="compte">
+                                <h2>Abigail</h2>
+                                <p class="amountRecap">{{ amount(diviserAbigail) }}</p>
+                                <p class="labelAmount">Dépenses communes</p>
+                                <p class="amountRecap">{{ amount(rembourserAbigail) }}</p>
+                                <p class="labelAmount">Remboursement</p>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if totalMathis > totalAbigail %}
+                        <p class="recapFinale"><span class="bold">Abigail</span> doit <span
+                                    class="blueColor bold">{{ amount(totalMathis - totalAbigail) }}</span> à <span
+                                    class="bold">Mathis</span></p>
+                    {% elseif totalAbigail > totalMathis %}
+                        <p class="recapFinale"><span class="bold">Mathis</span> doit
+                            <span>{{ amount(totalMathis - totalAbigail) }}</span> à <span class="bold">Abigail</span></p>
+                    {% else %}
+                        <p class="recapFinale">Les comptes sont à jour</p>
+                    {% endif %}
+
+                    {% if totalMathis != 0 or totalAbigail != 0 %}
+                    <a href="{{ path('updateAll') }}">
+                        <div class="paiementOk">Mettre les comptes à jour</div>
+                    </a>
+                    {% endif %}
+                </div>
+            {% endif %}
+            <div id="open" class="open">
+                Ouvrir
+            </div>
+        </div>
+    </div>
+
+    <div class="transactions">
+        {% for line in transactions %}
+            <div class="line">
+                <div class="blockLine">
+                    <div class="leftSide">
+                        <div class="category"><img src="{{ asset('puzzle.png') }}" alt=""></div>
+                        <div class="informations">
+                            <p class="title">{{ line.description }}</p>
+                            <p class="description">{{ line.dateTransaction|date("d/m/Y") }}
+                                - {% if line.type == '1' %}À diviser{% elseif line.type == '2' %}À rembourser{% else %}Personnel{% endif %}
+                                - {{ line.username }}</p>
+                        </div>
+                    </div>
+                    <div class="amount">
+                        {{ amount(line.amount) }}
+                        <br>
+                        {% if line.statut == 0 %}
+                            <div class="statut redCircle"></div>
+                        {% else %}
+                            <div class="statut greenCircle"></div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="swiped swipeRight"><a href="{{ path('delete', {id: line.id}) }}">Supprimer</a></div>
+                <div class="swiped swipeLeft">{% if line.statut == 0 %}<a href="{{ path('update', {id: line.id}) }}">Régulariser<br>ce paiement</a>{% else %}Paiement régularisé{% endif %}</div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="footer">
+        <a href="{{ path('add') }}">
+            <div class="addTransaction">Nouveau</div>
+        </a>
+    </div>
+
+    <script>
+
+        $('.line').bind('swiped-left', function (e) {
+            if ($(this).children('.blockLine').hasClass('swipeAnimRight')) {
+                $(this).children('.blockLine').removeClass('swipeAnimRight');
+                setTimeout(() => {
+                    $(this).children('.blockLine').removeClass('animRight');
+                }, 500);
+            } else {
+                $('.blockLine').not($(this).children('.blockLine')).removeClass('swipeAnimLeft swipeAnimRight');
+                setTimeout(() => {
+                    $('.blockLine').not($(this).children('.blockLine')).removeClass('animLeft animRight');
+                }, 500);
+
+                $(this).children('.blockLine').addClass('swipeAnimLeft');
+                $(this).children('.blockLine').addClass('animLeft');
+            }
+        });
+        $('.line').bind('swiped-right', function (e) {
+            if ($(this).children('.blockLine').hasClass('swipeAnimLeft')) {
+                $(this).children('.blockLine').removeClass('swipeAnimLeft');
+                setTimeout(() => {
+                    $(this).children('.blockLine').removeClass('animLeft');
+                }, 500);
+            } else {
+                $('.blockLine').not($(this).children('.blockLine')).removeClass('swipeAnimRight swipeAnimLeft');
+                setTimeout(() => {
+                    $('.blockLine').not($(this).children('.blockLine')).removeClass('animRight animLeft');
+                }, 500);
+
+                $(this).children('.blockLine').addClass('swipeAnimRight');
+                $(this).children('.blockLine').addClass('animRight');
+            }
+        });
+
+        $("#open").click(function () {
+            let open = $('#open').text().replace(/\s/g, '');
+
+            if (open === "Ouvrir") {
+                {% if totalMathis != 0 or totalAbigail != 0 %}
+                $('.boxHeader')[0].classList.add("opened");
+                {% else %}
+                $('.boxHeader')[0].classList.add("openedEmpty");
+                {% endif %}
+                $('#open').text('Fermer');
+            } else {
+                {% if totalMathis != 0 or totalAbigail != 0 %}
+                $('.boxHeader')[0].classList.remove("opened");
+                {% else %}
+                $('.boxHeader')[0].classList.remove("openedEmpty");
+                {% endif %}
+
+                $('#open').text('Ouvrir');
+            }
+        });
+
+    </script>
+
+{% endblock %}

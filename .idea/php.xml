@@ -105,6 +105,9 @@
       <path value="$PROJECT_DIR$/vendor/symfony/web-server-bundle" />
       <path value="$PROJECT_DIR$/vendor/beberlei/doctrineextensions" />
       <path value="$PROJECT_DIR$/vendor/symfony/webpack-encore-bundle" />
+      <path value="$PROJECT_DIR$/vendor/nacmartin/phpexecjs" />
+      <path value="$PROJECT_DIR$/vendor/limenius/react-bundle" />
+      <path value="$PROJECT_DIR$/vendor/limenius/react-renderer" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.1" />

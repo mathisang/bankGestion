@@ -4,9 +4,12 @@ namespace App\Controller;
 
 use App\Entity\Configuration;
 use App\Entity\Transaction;
+use App\Entity\Username;
 use App\Form\TransactionType;
+use App\Form\UsernameType;
 use App\Repository\ConfigurationRepository;
 use App\Repository\TransactionRepository;
+use App\Repository\UsernameRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,10 +19,64 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController extends AbstractController
 {
+    // FRONT REACT
+
     /**
-     * @Route("/", name="home")
+     * @Route("/{reactRouting}", name="home", defaults={"reactRouting": null})
      */
-    public function index(TransactionRepository $transaction, EntityManagerInterface $em): Response
+    public function index(): Response
+    {
+        return $this->render('base.html.twig', []);
+    }
+
+    // API
+
+    protected function transformJsonBody(\Symfony\Component\HttpFoundation\Request $request)
+    {
+        $data = json_decode($request->getContent(), true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return null;
+        }
+
+        if ($data === null) {
+            return $request;
+        }
+
+        $request->request->replace($data);
+
+        return $request;
+    }
+
+    /**
+     * @Route("/api/users")
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function postUser(Request $request, EntityManagerInterface $em, UsernameRepository $usernameRepository)
+    {
+        $request = $this->transformJsonBody($request);
+
+        $user = new Username();
+
+        $user->setName($request->get('username')['user']);
+        $user->setColor($request->get('username')['color']);
+
+        $em->persist($user);
+        $em->flush();
+        $response = new Response();
+
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+
+        $response->setContent(json_encode($user));
+
+        return $response;
+    }
+
+    /**
+     * @Route("/homes", name="accueil")
+     */
+    public function home(TransactionRepository $transaction, EntityManagerInterface $em): Response
     {
         $configuration = $this->getDoctrine()
             ->getRepository(Configuration::class)
@@ -59,7 +116,7 @@ class HomeController extends AbstractController
                 $dateFin = 0;
             }
 
-            return $this->render('index.html.twig', [
+            return $this->render('home.html.twig', [
                 'selected' => "dashboard",
                 'transactions' => $transactions,
                 'dateDebut' => $dateDebut,
@@ -158,16 +215,6 @@ class HomeController extends AbstractController
             'amountNow' => $amountNow,
             'amountLast' => $amountLast,
         ]);
-    }
-
-    /**
-     * @Route("/settings/who", name="whoareyou")
-     */
-    public function whoareyou(): Response
-    {
-
-
-        return $this->render('/settings/whoareyou.html.twig', []);
     }
 
     /**

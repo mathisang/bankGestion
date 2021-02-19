@@ -93,8 +93,17 @@
     "laminas/laminas-zendframework-bridge": {
         "version": "1.1.1"
     },
+    "limenius/react-bundle": {
+        "version": "v5.0.3"
+    },
+    "limenius/react-renderer": {
+        "version": "v5.0.3"
+    },
     "monolog/monolog": {
         "version": "1.26.0"
+    },
+    "nacmartin/phpexecjs": {
+        "version": "v3.0.0"
     },
     "nikic/php-parser": {
         "version": "v4.10.4"
