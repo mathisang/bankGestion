@@ -20,17 +20,17 @@ class User extends Component {
         const handleSubmit = (event) => {
             event.preventDefault();
 
-            pushDatabase([{'user': this.state.yourName,'color': '#2X1541'},{'user': this.state.hisName,'color': '#AZ1541'}]);
+            pushDatabase([{'user': this.state.yourName,'color': 'blue'},{'user': this.state.hisName,'color': 'red'}]);
         }
 
         const skipNaming = () => {
-            pushDatabase([{'user': 'Utilisateur 1','color': '#2X1541'},{'user': 'Utilisateur 2','color': '#AZ1541'}]);
+            pushDatabase([{'user': 'Utilisateur 1','color': 'blue'},{'user': 'Utilisateur 2','color': 'red'}]);
         }
 
         const pushDatabase = (user) => {
             for (let i = 0; i < 2; i++) {
                 let username = user[i];
-                axios.post(`http://127.0.0.1:8000/api/users`, {username})
+                axios.post(`http://127.0.0.1:8000/api/post/users`, {username})
                     .then(res => {
                         this.setState({ step: true });
                     })

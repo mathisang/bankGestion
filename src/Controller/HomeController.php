@@ -49,10 +49,10 @@ class HomeController extends AbstractController
     }
 
     /**
-     * @Route("/api/users")
+     * @Route("/api/post/users", name="postUser")
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function postUser(Request $request, EntityManagerInterface $em, UsernameRepository $usernameRepository)
+    public function postUser(Request $request, EntityManagerInterface $em)
     {
         $request = $this->transformJsonBody($request);
 
@@ -69,6 +69,58 @@ class HomeController extends AbstractController
         $response->headers->set('Access-Control-Allow-Origin', '*');
 
         $response->setContent(json_encode($user));
+
+        return $response;
+    }
+
+    /**
+     * @Route("/api/update/users", name="updateUser")
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function updateUser(Request $request, EntityManagerInterface $em, UsernameRepository $username)
+    {
+        $request = $this->transformJsonBody($request);
+
+        $this->users = $username;
+
+        $user = $this->getDoctrine()
+            ->getRepository(Username::class)
+            ->find($request->get('username')['id']);
+
+        $user->setName($request->get('username')['user']);
+        $user->setColor($request->get('username')['color']);
+
+        $em->persist($user);
+        $em->flush();
+
+        $response = new Response();
+
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+
+        $response->setContent(json_encode($user));
+
+        return $response;
+    }
+
+    /**
+     * @Route("/api/get/users", name="getUsers")
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function getUsers(UsernameRepository $username)
+    {
+        $this->users = $username;
+
+        $users = $this->getDoctrine()
+            ->getRepository(Username::class)
+            ->findAll();
+
+        $response = new Response();
+
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+
+        $response->setContent(json_encode($users));
 
         return $response;
     }

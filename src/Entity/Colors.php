@@ -2,30 +2,25 @@
 
 namespace App\Entity;
 
-use App\Repository\UsernameRepository;
+use App\Repository\ColorsRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=UsernameRepository::class)
+ * @ORM\Entity(repositoryClass=ColorsRepository::class)
  */
-class Username
+class Colors
 {
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    public $id;
+    private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    public $name;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    public $color;
+    private $name;
 
     public function getId(): ?int
     {
@@ -40,18 +35,6 @@ class Username
     public function setName(string $name): self
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getColor(): ?string
-    {
-        return $this->color;
-    }
-
-    public function setColor(string $color): self
-    {
-        $this->color = $color;
 
         return $this;
     }

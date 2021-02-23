@@ -8,6 +8,7 @@
         "prop-types": "^15.7.2",
         "react": "^17.0.1",
         "react-dom": "^17.0.1",
+        "react-dump": "^0.3.3",
         "regenerator-runtime": "^0.13.2",
         "sass": "^1.32.7",
         "sass-loader": "^11.0.1",
